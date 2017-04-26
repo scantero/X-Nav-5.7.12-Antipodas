@@ -1,25 +1,88 @@
+<!DOCTYPE html>
 <html>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+  <title>Antípodas</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>
+  <script src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyBgbzdRXm6TAFCmnXt6laZxM0q2e4v3r3M" async defer></script>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"></link>
 	<head>
  		<title>Las Antipodas</title>
 		<style>
-			#map {
+      body{
+        padding-left: 50px;
+      }
+			#map-1, #map-2 {
 				width:500px;
 				height: 400px;
 			}
  		</style>
  	</head>
 	<body>
-        	<p id='map'></p>
-  	        <script type="text/javascript" charset="utf-8">
-            function initMap(){
-                var mapDiv = document.getElementById("map");
-				var map = new google.maps.Map(mapDiv, {
-					center: {lat: 40.283743650362996, lng: -3.8191530513763428},
-					zoom: 15
-				});
- 			}
- 		</script>
-		<script src = "https://maps.googleapis.com/maps/api/js?callback=initMap" async defer></script>
+    <h4 id="modernizr"></h4>
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+        <p id="lat">Latitud actual: </p>
+        <p id="lon">Longitud actual: </p>
+        </br>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+        <p id="latA">Latitud antípodas: </p>
+        <p id="lonA">Longitud antípodas: </p>
+        </br>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+        <p>Tu localización actual</p>
+      	<p id='map-1'></p>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+        <p>Las antípodas de tu localización</p>
+      	<p id='map-2'></p>
+      </div>
+    </div>
+    <script type="text/javascript" charset="utf-8">
+      //modernizr
+      function show_maps(position) {
+        var latitude = position.coords.latitude;
+        var longitude = position.coords.longitude;
+        var lat = document.getElementById("lat");
+        var lon = document.getElementById("lon");
+        lat.innerHTML += latitude;
+        lon.innerHTML += longitude;
+        latA.innerHTML += latitude * (-1);
+        lonA.innerHTML += longitude + 180;
+        var mapDiv1 = document.getElementById("map-1");
+        var map1 = new google.maps.Map(mapDiv1,
+                                      { center: {lat: latitude,
+                                                 lng: longitude},
+                                        zoom: 15
+                                      });
+        var mapDiv2 = document.getElementById("map-2");
+        var map2 = new google.maps.Map(mapDiv2,
+                                      { center: {lat: latitude * (-1),
+                                                 lng: longitude + 180},
+                                        zoom: 6
+                                      });
+
+      }
+      if (Modernizr.geolocation) {
+        var elem = document.getElementById("modernizr");
+        var contenido = "Localización de las antípodas de tu posición";
+        elem.innerHTML = contenido;
+        navigator.geolocation.getCurrentPosition(show_maps);
+      }
+      else {
+        var elem = document.getElementById("modernizr");
+        var contenido = "No native ELEMENT support available :(.";
+        elem.innerHTML = contenido;
+      }
+      //maps
+      function initMap(){
+
+      }
+      initMap();
+    </script>
 	</body>
 </html>
